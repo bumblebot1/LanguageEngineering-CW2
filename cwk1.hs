@@ -47,9 +47,9 @@ data Stm  = Ass Var Aexp | Skip | Comp Stm Stm | If Bexp Stm Stm | While Bexp St
 fv_aexp :: Aexp -> [Var]
 fv_aexp (N a)      = []
 fv_aexp (V x)      = [x]
-fv_aexp (Add a b)  = (fv_aexp a) ++ (fv_aexp b)
-fv_aexp (Mult a b) = (fv_aexp a) ++ (fv_aexp b)
-fv_aexp (Sub a b)  = (fv_aexp a) ++ (fv_aexp b)
+fv_aexp (Add a b)  = union (fv_aexp a) (fv_aexp b)
+fv_aexp (Mult a b) = union (fv_aexp a) (fv_aexp b)
+fv_aexp (Sub a b)  = union (fv_aexp a) (fv_aexp b)
 
 ---------------------------------------------------------------
 -- QUESTION 2)
@@ -60,10 +60,10 @@ fv_aexp (Sub a b)  = (fv_aexp a) ++ (fv_aexp b)
 fv_bexp :: Bexp -> [Var]
 fv_bexp (TRUE)    = []
 fv_bexp (FALSE)   = []
-fv_bexp (Eq a b)  = (fv_aexp a) ++ (fv_aexp b)
-fv_bexp (Le a b)  = (fv_aexp a) ++ (fv_aexp b)
+fv_bexp (Eq a b)  = union (fv_aexp a) (fv_aexp b)
+fv_bexp (Le a b)  = union (fv_aexp a) (fv_aexp b)
 fv_bexp (Neg a)   = (fv_bexp a)
-fv_bexp (And a b) = (fv_bexp a) ++ (fv_bexp b)
+fv_bexp (And a b) = union (fv_bexp a) (fv_bexp b)
 ---------------------------------------------------------------
 -- QUESTION 3)
 -- Write a function subst_aexp with the following signature such that 
@@ -116,3 +116,9 @@ b_val (Eq a b)  s = (a_val a s) == (a_val b s)
 b_val (Le a b)  s = (a_val a s) <= (a_val b s)
 b_val (Neg a)   s =  not (b_val a s)
 b_val (And a b) s = (b_val a s)  && (b_val b s)
+
+union :: Eq a => [a] -> [a] -> [a]
+union [] y = y
+union (x:xs) y
+             | elem x y == True  = union xs y
+             | elem x y == False = union xs (x:y)
