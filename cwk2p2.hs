@@ -76,7 +76,7 @@ cond (b,p,q) s
 ---------------------------------------------------------------
 
 fix :: (a -> a) -> a
-fix f = let r = fix f in f r
+fix f = f (fix f)
 
 ---------------------------------------------------------------
 -- QUESTION 3)
@@ -105,7 +105,7 @@ s_ds (Comp a b)  s = x
                    y = s_ds a s
 s_ds (If x a b)  s = cond ((b_val x),(s_ds a),(s_ds b)) s
 s_ds (While x a) s = fix f
-    where f g = cond ((b_val x), s_ds a,g) g
+    where f g = cond ((b_val x), (s_ds a),g)
 
 ---------------------------------------------------------------
 -- QUESTION 5)
@@ -132,7 +132,4 @@ s  a  = 0
 -- Verify using your denotational semantics that p computes 5! 
 -- when it is applied to the state s
 ---------------------------------------------------------------
-q=s_ds p s
-p1 = Neg (Eq (V "x") (N 4))
-p2 = (Comp (Ass "y" (N 1)) (Ass "x" (N 4)))
-a=fix (cond((b_val TRUE),(s_ds (Ass "x" (N 7))),id))
+q = s_ds p s
