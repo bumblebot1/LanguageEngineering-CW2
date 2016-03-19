@@ -133,3 +133,4 @@ s  a  = 0
 -- when it is applied to the state s
 ---------------------------------------------------------------
 q = s_ds p s
+result = (q "y" == 120)
