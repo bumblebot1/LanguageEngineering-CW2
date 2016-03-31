@@ -237,8 +237,30 @@ ln8 = Comp (WriteA (V "base")) (Comp (WriteS " raised to the power of ") (Comp (
 -- program p in state s with input list i and output list o.
 ---------------------------------------------------------------
 
---s_ds :: Stm -> IOState -> IOState
+s_ds :: Stm -> IOState -> IOState
+s_ds (Ass v a)  (i,o,s)  = (i,o,(update s (a_val a s) v))
+s_ds (Skip) (i,o,s)      = (i,o,s)
+s_ds (Comp a b) (i,o,s)  = x
+             where x = s_ds b y
+                   y = s_ds a (i,o,s)
+--s_ds (If x a b)  (i,o,s) =(i,o,cond ((b_val x),(s_ds a),(s_ds b) s)
+--s_ds (While x a) (i,o,s) = (i,o,fix f s) where f g = cond( (b_val x), g. (s_ds' a), (s_ds' Skip) )
 
+s_ds (Read x)   (i,o,s)  = (xs,o ++ ["<"++(show y)++">"],update s y x)
+                        where y = head i
+                              xs = tail i
+
+s_ds (WriteA x) (i,o,s)  = (i, o ++ [show (a_val x s)], s)
+s_ds (WriteB x) (i,o,s)  = (i, o ++ [show (b_val x s)], s)
+s_ds (WriteS x) (i,o,s)  = (i, o ++ [x], s)
+s_ds  WriteLn   (i,o,s)  = (i, o ++ ["\n"],s)
+
+state::State
+state s = 0
+
+
+
+(x,y,z) = s_ds pow ([5,2],[],state)
 ---------------------------------------------------------------
 -- Part F)
 --
