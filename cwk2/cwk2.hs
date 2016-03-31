@@ -258,9 +258,9 @@ s_ds  WriteLn   (i,o,s)  = (i, o ++ ["\n"],s)
 state::State
 state s = 0
 
-
-
-(x,y,z) = s_ds pow ([5,2],[],state)
+stm::Stm
+stm=Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (WriteB (TRUE))(WriteB (FALSE)))(WriteB (Neg ((TRUE)))))(WriteB (Neg ((FALSE)))))(WriteB (And ((TRUE)) ((TRUE)))))(WriteB (And ((TRUE)) ((FALSE)))))(WriteB (And ((FALSE)) ((TRUE)))))(WriteB (And ((FALSE)) ((FALSE)))))(WriteB (Neg ((Neg ((TRUE)))))))(WriteB (And ((TRUE)) ((Neg ((TRUE)))))))(WriteB (And ((Neg ((TRUE)))) ((TRUE)))))(WriteB (Neg ((And ((TRUE)) ((TRUE)))))))(WriteB (And ((Neg ((TRUE)))) ((Neg ((And ((TRUE)) ((Neg ((TRUE))))))))))
+(x,y,z) = s_ds stm ([4,6],[],state)
 ---------------------------------------------------------------
 -- Part F)
 --

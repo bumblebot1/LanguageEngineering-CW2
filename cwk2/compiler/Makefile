@@ -3,6 +3,7 @@ all:
 	./antlr3 Syn.g
 	javac TokenConv.java
 	java TokenConv Syn.tokens Irt.java
+	java TokenConv Syn.tokens SemanticConv.java 
 	./antlr3 *.java
 
 clean:

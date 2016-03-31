@@ -27,6 +27,7 @@ class camle {
       System.out.println("  -lex");
       System.out.println("  -syn");
       System.out.println("  -irt");
+      System.out.println("  -hs");
       System.exit(1);
     }
     outFile = inFile;
@@ -55,6 +56,11 @@ class camle {
         System.exit(0);
       }
       CommonTreeNodeStream ast = new CommonTreeNodeStream(parserTree);
+      if (opt.equals("-hs")) {
+        SemanticConv.convert(parserTree);
+        Memory.dumpData(System.out);
+        System.exit(0);
+      }
       IRTree newIrt = Irt.convert(parserTree);
       if (opt.equals("-irt")) {
         System.out.println(newIrt);
