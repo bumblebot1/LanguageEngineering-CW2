@@ -35,10 +35,10 @@ statement :
     ELSE! statement
   | WHILE^ exp
     DO! statement
-  | READ^ OPENPAREN!  (name=IDENTIFIER ) CLOSEPAREN! { if(!table.containsKey($name.getText())) table.setType($name.getText(),"int"); else{if(!table.get($name.getText()).equals("int")) {System.out.println("Syntax Error : The type of variable "+$name.getText()+" is being changed in line "+$name.getLine());System.exit(1);} }if($name.getText().length()>8) {System.out.println("Syntax Error : Name of variable "+$name.getText()+" is longer than 8 characters"); System.exit(1);}}
-  | READR^ OPENPAREN! (name=IDENTIFIER ) CLOSEPAREN! { if(!table.containsKey($name.getText())) table.setType($name.getText(),"real"); else{if(!table.get($name.getText()).equals("real")) {System.out.println("Syntax Error : The type of variable "+$name.getText()+" is being changed in line "+$name.getLine());System.exit(1);} }if($name.getText().length()>8) {System.out.println("Syntax Error : Name of variable "+$name.getText()+" is longer than 8 characters"); System.exit(1);}}
-  | (s=SYMBOL!) (name=IDENTIFIER) ASSIGN^ exp { if(!table.containsKey($name.getText())) table.setType($name.getText(),$s.getText()); else {if(!table.get($name.getText()).equals($s.getText())) {System.out.println("Syntax Error : The type of variable "+$name.getText()+" is being changed in line "+$name.getLine());System.exit(1);}  }if($name.getText().length()>8) {System.out.println("Syntax Error : Name of variable "+$name.getText()+" is longer than 8 characters"); System.exit(1);}}
-  | (IDENTIFIER ASSIGN)=> (name=IDENTIFIER) ASSIGN^ exp { if(!table.containsKey($name.getText())) table.setType($name.getText(),"int"); if($name.getText().length()>8) {System.out.println("Syntax Error : Name of variable "+$name.getText()+" is longer than 8 characters"); System.exit(1);} }
+  | READ^ OPENPAREN!  (name=IDENTIFIER ) CLOSEPAREN! { if(!table.containsKey($name.getText())) table.setType($name.getText(),"int"); else{if(!table.get($name.getText()).equals("int")) {} }if($name.getText().length()>8) {}}
+  | READR^ OPENPAREN! (name=IDENTIFIER ) CLOSEPAREN! { if(!table.containsKey($name.getText())) table.setType($name.getText(),"real"); else{if(!table.get($name.getText()).equals("real")) {} }if($name.getText().length()>8) {}}
+  | (s=SYMBOL!) (name=IDENTIFIER) ASSIGN^ exp { if(!table.containsKey($name.getText())) table.setType($name.getText(),$s.getText()); else {if(!table.get($name.getText()).equals($s.getText())) {}  }if($name.getText().length()>8) {}}
+  | (IDENTIFIER ASSIGN)=> (name=IDENTIFIER) ASSIGN^ exp { if(!table.containsKey($name.getText())) table.setType($name.getText(),"int"); if($name.getText().length()>8) { } }
   | OPENPAREN! ( statements ) CLOSEPAREN!
   | SKIP^
   ;
@@ -72,7 +72,7 @@ mult:
   ;
 
 factor:
-    (name=IDENTIFIER) {if(!table.containsKey($name.getText())) {System.out.println("Syntax error : use of undeclared identifier "+$name.getText()+" at line "+$name.getLine()); System.exit(1);} else if($name.getText().length()>8){System.out.println("Syntax Error : Name of variable "+$name.getText()+" is longer than 8 characters"); System.exit(1);} }
+    (name=IDENTIFIER) {if(!table.containsKey($name.getText())) {} else if($name.getText().length()>8){} }
   | INTNUM
   | TRUE
   | FALSE
