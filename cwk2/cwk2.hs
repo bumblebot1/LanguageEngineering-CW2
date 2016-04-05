@@ -259,8 +259,9 @@ state::State
 state s = 0
 
 stm::Stm
-stm=Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (WriteB (TRUE))(WriteB (FALSE)))(WriteB (Neg ((TRUE)))))(WriteB (Neg ((FALSE)))))(WriteB (And ((TRUE)) ((TRUE)))))(WriteB (And ((TRUE)) ((FALSE)))))(WriteB (And ((FALSE)) ((TRUE)))))(WriteB (And ((FALSE)) ((FALSE)))))(WriteB (Neg ((Neg ((TRUE)))))))(WriteB (And ((TRUE)) ((Neg ((TRUE)))))))(WriteB (And ((Neg ((TRUE)))) ((TRUE)))))(WriteB (Neg ((And ((TRUE)) ((TRUE)))))))(WriteB (And ((Neg ((TRUE)))) ((Neg ((And ((TRUE)) ((Neg ((TRUE))))))))))
-(x,y,z) = s_ds pow ([9,4,2],[],state)
+stm=Comp (Comp (Comp (Comp (Comp (Comp (Comp ((Read "max"))(WriteA ((V "max"))))(WriteLn))(Ass "num" ((Add ((Mult ((Sub ((Mult ((N 331)) ((V "max")))) ((N 3)))) ((N 2)))) ((V "max"))))))(Ass "i1" ((Sub ((N 0)) ((N 4))))))((Read "i2")))(If ((Neg ((Eq ((V "num")) ((V "max"))))))(Comp (Ass "limit" ((V "num")))(If ((Le ((Sub ((N 0)) ((V "max")))) ((V "num"))))(WriteA ((Add ((N 3)) ((Mult ((V "max")) ((N 2)))))))(Skip)))(Comp (While ((Le ((V "i1")) ((Sub ((Mult ((N 2)) ((V "i2")))) ((N 1))))))(If ((And ((Le ((Mult ((V "longname")) ((N 2)))) ((V "i1")))) ((Neg ((Eq ((Mult ((V "longname")) ((N 2)))) ((V "i1"))))))))(Ass "max" ((Mult ((V "max")) ((N 3)))))(Skip)))(Ass "longname" ((V "max"))))))(While ((And ((Le ((V "i1")) ((V "limit")))) ((Neg ((Eq ((V "i1")) ((V "limit"))))))))(Comp (If ((Eq ((V "i1")) ((V "i2"))))(WriteS "yes")(Skip))(Ass "i1" ((Add ((V "i1")) ((N 1)))))))
+
+(x,y,z) = s_ds stm ([27,39],[],state)
 
 ---------------------------------------------------------------
 -- Part F)
