@@ -87,10 +87,10 @@ b_val (Le a b)  s = (a_val a s) <= (a_val b s)
 b_val (Neg a)   s =  not (b_val a s)
 b_val (And a b) s = (b_val a s)  && (b_val b s)
 
-cond :: (a->T, a->a, a->a) -> (a->a)
-cond (b,p,q) s
-            | b s == True         = p s
-            | otherwise           = q s
+cond :: (State->T, IOState->IOState, IOState->IOState) -> (IOState->IOState)
+cond (b,p,q) (i,o,s)
+            | b s == True         = p (i,o,s)
+            | otherwise           = q (i,o,s)
 
 fix :: (a -> a) -> a
 fix f = f (fix f)
@@ -139,7 +139,7 @@ writeln;
 writeln;
 ---------------------------------------------------------------}
 fac   :: Stm
-fac   = Comp stm1 (Comp stm2 (Comp stm3 (Comp stm4 (Comp stm5 (Comp stm6 (Comp stm7 (Comp stm8 (Comp stm9 (Comp stm2 stm2) ) ) ) ) ) ) ) )
+fac   = Comp stm1 (Comp stm2 (Comp stm3 (Comp stm4 (Comp stm5 (Comp stm6 (Comp stm7 (Comp stm8 (Comp stm9 (Comp stm12 (Comp stm2 stm2) ) ) ) ) ) ) ) ) )
 
 
 stm1  :: Stm
@@ -243,8 +243,8 @@ s_ds (Skip) (i,o,s)      = (i,o,s)
 s_ds (Comp a b) (i,o,s)  = x
              where x = s_ds b y
                    y = s_ds a (i,o,s)
---s_ds (If x a b)  (i,o,s) =(i,o,cond ((b_val x),(s_ds a),(s_ds b) s)
---s_ds (While x a) (i,o,s) = (i,o,fix f s) where f g = cond( (b_val x), g. (s_ds' a), (s_ds' Skip) )
+s_ds (If x a b)  (i,o,s) = cond ((b_val x),(s_ds a),(s_ds b)) (i,o,s)
+s_ds (While x a) (i,o,s) = fix f (i,o,s) where f g = cond( (b_val x), g. (s_ds a), (s_ds Skip) )
 
 s_ds (Read x)   (i,o,s)  = (xs,o ++ ["<"++(show y)++">"],update s y x)
                         where y = head i
@@ -260,7 +260,8 @@ state s = 0
 
 stm::Stm
 stm=Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (WriteB (TRUE))(WriteB (FALSE)))(WriteB (Neg ((TRUE)))))(WriteB (Neg ((FALSE)))))(WriteB (And ((TRUE)) ((TRUE)))))(WriteB (And ((TRUE)) ((FALSE)))))(WriteB (And ((FALSE)) ((TRUE)))))(WriteB (And ((FALSE)) ((FALSE)))))(WriteB (Neg ((Neg ((TRUE)))))))(WriteB (And ((TRUE)) ((Neg ((TRUE)))))))(WriteB (And ((Neg ((TRUE)))) ((TRUE)))))(WriteB (Neg ((And ((TRUE)) ((TRUE)))))))(WriteB (And ((Neg ((TRUE)))) ((Neg ((And ((TRUE)) ((Neg ((TRUE))))))))))
-(x,y,z) = s_ds stm ([4,6],[],state)
+(x,y,z) = s_ds pow ([9,4,2],[],state)
+
 ---------------------------------------------------------------
 -- Part F)
 --
