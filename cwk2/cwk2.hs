@@ -87,7 +87,7 @@ b_val (Le a b)  s = (a_val a s) <= (a_val b s)
 b_val (Neg a)   s =  not (b_val a s)
 b_val (And a b) s = (b_val a s)  && (b_val b s)
 
-cond :: (State->T, IOState->IOState, IOState->IOState) -> (IOState->IOState)
+cond :: (c->T, (a,b,c)->(a,b,c), (a,b,c)->(a,b,c))-> (a,b,c)->(a,b,c)
 cond (b,p,q) (i,o,s)
             | b s == True         = p (i,o,s)
             | otherwise           = q (i,o,s)
@@ -274,4 +274,8 @@ stm=Comp (Comp (Comp (Comp (Comp (Comp (Comp ((Read "max"))(WriteA ((V "max"))))
 -- their respective values in the final state.
 ---------------------------------------------------------------
 
---eval :: Stm -> IOState -> (Input, Output, [Var], [Num])
+eval :: Stm -> IOState -> (Input, Output, [Var], [Num])
+eval a (i,o,s) = (x,y,vars,vals)
+    where (x,y,z) = s_ds a (i,o,s)
+          vars = fv_stm a
+          vals = [z x| x <- vars]
