@@ -87,10 +87,8 @@ b_val (Le a b)  s = (a_val a s) <= (a_val b s)
 b_val (Neg a)   s =  not (b_val a s)
 b_val (And a b) s = (b_val a s)  && (b_val b s)
 
-cond :: (c->T, (a,b,c)->(a,b,c), (a,b,c)->(a,b,c))-> (a,b,c)->(a,b,c)
-cond (b,p,q) (i,o,s)
-            | b s == True         = p (i,o,s)
-            | otherwise           = q (i,o,s)
+cond :: (a->T, a->a, a->a) -> (a->a)
+cond (b,p,q) s = if (b s) == True then (p s) else (q s)
 
 fix :: (a -> a) -> a
 fix f = f (fix f)
@@ -236,6 +234,8 @@ ln8 = Comp (WriteA (V "base")) (Comp (WriteS " raised to the power of ") (Comp (
 -- s_ds p (i,o,s) returns the result of semantically evaluating
 -- program p in state s with input list i and output list o.
 ---------------------------------------------------------------
+cond' :: (c->T, (a,b,c)->(a,b,c), (a,b,c)->(a,b,c))-> (a,b,c)->(a,b,c)
+cond' (b,p,q) (i,o,s) = if (b s) == True then (p (i,o,s)) else (q (i,o,s))
 
 s_ds :: Stm -> IOState -> IOState
 s_ds (Ass v a)  (i,o,s)  = (i,o,(update s (a_val a s) v))
@@ -243,25 +243,21 @@ s_ds (Skip) (i,o,s)      = (i,o,s)
 s_ds (Comp a b) (i,o,s)  = x
              where x = s_ds b y
                    y = s_ds a (i,o,s)
-s_ds (If x a b)  (i,o,s) = cond ((b_val x),(s_ds a),(s_ds b)) (i,o,s)
-s_ds (While x a) (i,o,s) = fix f (i,o,s) where f g = cond( (b_val x), g. (s_ds a), (s_ds Skip) )
+s_ds (If x a b)  (i,o,s) = cond' ((b_val x),(s_ds a),(s_ds b)) (i,o,s)
+s_ds (While x a) (i,o,s) = fix f (i,o,s) where f g = cond'( (b_val x), g. (s_ds a), id )
 
 s_ds (Read x)   (i,o,s)  = (xs,o ++ ["<"++(show y)++">"],update s y x)
-                        where y = head i
-                              xs = tail i
+                        where (y:xs) = i
 
 s_ds (WriteA x) (i,o,s)  = (i, o ++ [show (a_val x s)], s)
 s_ds (WriteB x) (i,o,s)  = (i, o ++ [show (b_val x s)], s)
 s_ds (WriteS x) (i,o,s)  = (i, o ++ [x], s)
 s_ds  WriteLn   (i,o,s)  = (i, o ++ ["\n"],s)
 
-state::State
-state s = 0
-
 stm::Stm
-stm=Comp (Comp (Comp (Comp (Comp (Comp (Comp ((Read "max"))(WriteA ((V "max"))))(WriteLn))(Ass "num" ((Add ((Mult ((Sub ((Mult ((N 331)) ((V "max")))) ((N 3)))) ((N 2)))) ((V "max"))))))(Ass "i1" ((Sub ((N 0)) ((N 4))))))((Read "i2")))(If ((Neg ((Eq ((V "num")) ((V "max"))))))(Comp (Ass "limit" ((V "num")))(If ((Le ((Sub ((N 0)) ((V "max")))) ((V "num"))))(WriteA ((Add ((N 3)) ((Mult ((V "max")) ((N 2)))))))(Skip)))(Comp (While ((Le ((V "i1")) ((Sub ((Mult ((N 2)) ((V "i2")))) ((N 1))))))(If ((And ((Le ((Mult ((V "longname")) ((N 2)))) ((V "i1")))) ((Neg ((Eq ((Mult ((V "longname")) ((N 2)))) ((V "i1"))))))))(Ass "max" ((Mult ((V "max")) ((N 3)))))(Skip)))(Ass "longname" ((V "max"))))))(While ((And ((Le ((V "i1")) ((V "limit")))) ((Neg ((Eq ((V "i1")) ((V "limit"))))))))(Comp (If ((Eq ((V "i1")) ((V "i2"))))(WriteS "yes")(Skip))(Ass "i1" ((Add ((V "i1")) ((N 1)))))))
+stm=Comp (Comp (Comp (Comp (Comp (Comp (Comp (WriteS "Recommended parameters: size=28, rings=10")(WriteLn))(WriteS "Size: "))((Read "size")))(WriteS "Number of rings: "))((Read "nRings")))(Ass "y" ((Sub ((N 0)) ((V "size"))))))(While ((Le ((V "y")) ((V "size"))))(Comp (Comp (Comp (Ass "x" ((Sub ((N 0)) ((V "size")))))(While ((Le ((V "x")) ((V "size"))))(Comp (Comp (Comp (Comp (Comp (Ass "distSq" ((Add ((Mult ((V "x")) ((V "x")))) ((Mult ((V "y")) ((V "y")))))))(Ass "ring" ((N 0))))(While ((Le ((Mult ((Mult ((Mult ((Add ((Mult ((N 2)) ((V "ring")))) ((N 1)))) ((Add ((Mult ((N 2)) ((V "ring")))) ((N 1)))))) ((Add ((Mult ((N 2)) ((V "size")))) ((N 1)))))) ((Add ((Mult ((N 2)) ((V "size")))) ((N 1)))))) ((Mult ((Mult ((Mult ((V "distSq")) ((N 4)))) ((Sub ((Mult ((N 2)) ((V "nRings")))) ((N 1)))))) ((Sub ((Mult ((N 2)) ((V "nRings")))) ((N 1))))))))(Ass "ring" ((Add ((V "ring")) ((N 1)))))))(If ((Le ((V "nRings")) ((V "ring"))))(WriteS " ")(WriteA ((V "ring")))))(WriteS " "))(Ass "x" ((Add ((V "x")) ((N 1))))))))(WriteLn))(Ass "y" ((Add ((V "y")) ((N 1)))))))
 
-(x,y,z) = s_ds stm ([27,39],[],state)
+(x,y,z) = s_ds stm ([27,39],[],undefined)
 
 ---------------------------------------------------------------
 -- Part F)
