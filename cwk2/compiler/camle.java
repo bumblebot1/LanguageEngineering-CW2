@@ -58,6 +58,7 @@ class camle {
       CommonTreeNodeStream ast = new CommonTreeNodeStream(parserTree);
       if (opt.equals("-hs")) {
         SemanticConv.convert(parserTree);
+        System.out.println();
         Memory.dumpData(System.out);
         System.exit(0);
       }

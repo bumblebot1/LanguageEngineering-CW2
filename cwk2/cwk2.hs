@@ -255,7 +255,7 @@ s_ds (WriteS x) (i,o,s)  = (i, o ++ [x], s)
 s_ds  WriteLn   (i,o,s)  = (i, o ++ ["\n"],s)
 
 stm::Stm
-stm=Comp (Comp (Comp (Comp (Comp (Comp (Comp (WriteS "Recommended parameters: size=28, rings=10")(WriteLn))(WriteS "Size: "))((Read "size")))(WriteS "Number of rings: "))((Read "nRings")))(Ass "y" ((Sub ((N 0)) ((V "size"))))))(While ((Le ((V "y")) ((V "size"))))(Comp (Comp (Comp (Ass "x" ((Sub ((N 0)) ((V "size")))))(While ((Le ((V "x")) ((V "size"))))(Comp (Comp (Comp (Comp (Comp (Ass "distSq" ((Add ((Mult ((V "x")) ((V "x")))) ((Mult ((V "y")) ((V "y")))))))(Ass "ring" ((N 0))))(While ((Le ((Mult ((Mult ((Mult ((Add ((Mult ((N 2)) ((V "ring")))) ((N 1)))) ((Add ((Mult ((N 2)) ((V "ring")))) ((N 1)))))) ((Add ((Mult ((N 2)) ((V "size")))) ((N 1)))))) ((Add ((Mult ((N 2)) ((V "size")))) ((N 1)))))) ((Mult ((Mult ((Mult ((V "distSq")) ((N 4)))) ((Sub ((Mult ((N 2)) ((V "nRings")))) ((N 1)))))) ((Sub ((Mult ((N 2)) ((V "nRings")))) ((N 1))))))))(Ass "ring" ((Add ((V "ring")) ((N 1)))))))(If ((Le ((V "nRings")) ((V "ring"))))(WriteS " ")(WriteA ((V "ring")))))(WriteS " "))(Ass "x" ((Add ((V "x")) ((N 1))))))))(WriteLn))(Ass "y" ((Add ((V "y")) ((N 1)))))))
+stm=Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Ass "i" (N 10023))(WriteA (V "i")))(WriteLn))(Ass "a" (V "i")))(WriteA (V "a")))(WriteLn))(Ass "j" (N 76)))(WriteA (V "j")))(WriteLn))(Ass "a" (V "j")))(WriteA (V "a")))(WriteLn)
 
 (x,y,z) = s_ds stm ([27,39],[],undefined)
 

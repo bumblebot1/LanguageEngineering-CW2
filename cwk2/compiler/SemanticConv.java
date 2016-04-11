@@ -112,7 +112,7 @@ public class SemanticConv
     else if(tt == READ){
       ast1=(CommonTree)ast.getChild(0);
       Token t1=ast1.getToken();//IDENTIFIER name of the variable
-      System.out.print("(Read \""+t1.getText()+"\")");
+      System.out.print("Read \""+t1.getText()+"\"");
     }
     else if(tt == IF){
       ast1=(CommonTree)ast.getChild(0);
@@ -200,80 +200,80 @@ public class SemanticConv
     Token t = ast.getToken();
     int tt = t.getType();
     if (tt == INTNUM) {
-      System.out.print("(N ");
+      System.out.print("N ");
       constant(ast);
     }
     else if(tt == IDENTIFIER){
       String var = t.getText();
-      System.out.print("(V \""+var+"\")");
+      System.out.print("V \""+var+"\"");
     }
     else if(tt==PLUS){
       ast1=(CommonTree) ast.getChild(0);
       ast2=(CommonTree) ast.getChild(1);
-      System.out.print("(Add (");
+      System.out.print("Add (");
       expression(ast1);
       System.out.print(") (");
       expression(ast2);
-      System.out.print("))");
+      System.out.print(")");
     }
     else if(tt==MINUS){
       ast1=(CommonTree) ast.getChild(0);
       ast2=(CommonTree) ast.getChild(1);
-      System.out.print("(Sub (");
+      System.out.print("Sub (");
       expression(ast1);
       System.out.print(") (");
       expression(ast2);
-      System.out.print("))");
+      System.out.print(")");
     }
     else if(tt==TIMES){
       ast1=(CommonTree) ast.getChild(0);
       ast2=(CommonTree) ast.getChild(1);
-      System.out.print("(Mult (");
+      System.out.print("Mult (");
       expression(ast1);
       System.out.print(") (");
       expression(ast2);
-      System.out.print("))");
+      System.out.print(")");
     }
 
     else if(tt==EQUALS){
       ast1=(CommonTree) ast.getChild(0);
       ast2=(CommonTree) ast.getChild(1);
-      System.out.print("(Eq (");
+      System.out.print("Eq (");
       expression(ast1);
       System.out.print(") (");
       expression(ast2);
-      System.out.print("))");
+      System.out.print(")");
     }
     else if(tt==LOWERTHAN){
       ast1=(CommonTree) ast.getChild(0);
       ast2=(CommonTree) ast.getChild(1);
-      System.out.print("(Le (");
+      System.out.print("Le (");
       expression(ast1);
       System.out.print(") (");
       expression(ast2);
-      System.out.print("))");
+      System.out.print(")");
 
     }
     else if(tt==NOT){
       ast1=(CommonTree) ast.getChild(0);
-      System.out.print("(Neg (");
+      System.out.print("Neg (");
       expression(ast1);
-      System.out.print("))");
+      System.out.print(")");
     }
     else if(tt==AND){
       ast1=(CommonTree) ast.getChild(0);
       ast2=(CommonTree) ast.getChild(1);
-      System.out.print("(And (");
+      System.out.print("And (");
       expression(ast1);
       System.out.print(") (");
       expression(ast2);
-      System.out.print("))");
+      System.out.print(")");
     }
     else if(tt==TRUE){
-      System.out.print("(TRUE)");
+      System.out.print("TRUE");
     }
     else if(tt==FALSE){
-      System.out.print("(FALSE)");
+      System.out.print("FALSE");
     }
     else{
         error(tt);
@@ -288,7 +288,7 @@ public class SemanticConv
     int tt = t.getType();
     if (tt == INTNUM) {
       String tx = t.getText();
-      System.out.print(tx+")");
+      System.out.print(tx);
     }
     else {
 
