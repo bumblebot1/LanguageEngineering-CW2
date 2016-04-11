@@ -156,33 +156,39 @@ public class SemanticConv
       return "string";
     }
     else if(tt == TRUE){
-      System.out.print("WriteB ");
+      System.out.print("WriteB (");
       expression(ast);
+      System.out.print(")");
       return "boolean";
     }
     else if(tt == FALSE){
-      System.out.print("WriteB ");
+      System.out.print("WriteB (");
       expression(ast);
+      System.out.print(")");
       return "boolean";
     }
     else if(tt == NOT){
-      System.out.print("WriteB ");
+      System.out.print("WriteB (");
       expression(ast);
+      System.out.print(")");
       return "boolean";
     }
     else if(tt == AND){
-      System.out.print("WriteB ");
+      System.out.print("WriteB (");
       expression(ast);
+      System.out.print(")");
       return "boolean";
     }
     else if(tt == EQUALS){
-      System.out.print("WriteB ");
+      System.out.print("WriteB (");
       expression(ast);
+      System.out.print(")");
       return "boolean";
     }
     else if(tt == LOWERTHAN){
-      System.out.print("WriteB ");
+      System.out.print("WriteB (");
       expression(ast);
+      System.out.print(")");
       return "boolean";
     }
     else {
