@@ -8,7 +8,6 @@ import org.antlr.runtime.tree.*;
 class camle {
   public static void main(String[] args)
   {
-    System.out.println("CAMLE - Compiler to Abstract Machine for Language Engineering");
     String opt = "", inFile = "", outFile = "";
     int pos;
     if (Array.getLength(args) == 1 && args[0].charAt(0) != '-') {
