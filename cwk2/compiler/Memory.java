@@ -141,7 +141,7 @@ public class Memory {
         s = String.valueOf((char)c);
       }
       else {
-        s = ""; // "\\"+String.valueOf(c);
+        s = "\\"+String.valueOf(c);
       }
       o.println("DATA "+c+" ; "+s+" "+b.getName());
     }

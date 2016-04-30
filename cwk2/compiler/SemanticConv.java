@@ -304,7 +304,7 @@ public class SemanticConv
 
   private static void error(int tt)
   {
-    System.out.println("Hask error: "+tokenNames[tt]);
+    System.out.println("Error converting to haskell term: "+tokenNames[tt]);
     System.exit(1);
   }
 }

@@ -58,7 +58,6 @@ class camle {
       if (opt.equals("-hs")) {
         SemanticConv.convert(parserTree);
         System.out.println();
-        Memory.dumpData(System.out);
         System.exit(0);
       }
       IRTree newIrt = Irt.convert(parserTree);
