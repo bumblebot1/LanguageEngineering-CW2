@@ -42,26 +42,27 @@ read(x);
 
 write('Factorial of '); write(x); write(' is ');
 
-{ x=n & OUT=append(_) }
+{ x=n & 1=1 & OUT=append(_) }
 
 y := 1;
 
-{ x=n & y=1 & OUT=append(_) }*
-{ x>0 & x!*y=n! & OUT=append(_) }
+{ x=n & y=1 & OUT=append(_) }* Pre1
+{ x>0 implies (x!*y=n! & OUT=append(_)) }
 
 while !(x=1) do (
-  { x>0 & x!*y=n! & !(x=1) & OUT=append(_) }**
-  { x-1>0 & (x-1)!*x*y=n! & OUT=append(_) }
+  { (x>0 implies (x!*y=n! & OUT=append(_))) & !(x=1) }** Pre2
+  { x-1>0 implies ((x-1)!*x*y=n! & OUT=append(_)) }
 
   y := y * x;
 
-  { x-1>0 & (x-1)!*y=n! & OUT=append(_) }
+  { x-1>0 implies (x-1)!*y=n! & OUT=append(_) }
 
   x := x - 1
 
-  { x>0 & x!*y=n! & OUT=append(_) }
+  { x>0 implies (x!*y=n! & OUT=append(_)) }***Post2
+  { x>0 implies (x!*y=n! & OUT=append(_)) }
 );
-{ x>0 & x!*y=n! & !!(x=1) & OUT=append(_) }***
+{ (x>0 implies (x!*y=n! & OUT=append(_))) & !!(x=1) }****Post1
 { y=n! & OUT=append(_) }
 write(y);
 
@@ -76,6 +77,71 @@ writeln;
 { OUT=append(_,[n!,_,_]) }
 
 
+
+PROOF OBLIGATIONS:
+Pre1:
+x=n & y=1 & OUT=append(_) |= (x>0 implies (x!*y=n! & OUT=append(_)))
+(1)x=n           given
+(2)y=1           given
+(3)OUT=append(_) given
+Moving on we need to distinguish between two cases (n>0 and n<=0)
+
+case1: n<=0 then from (1) we get that x<=0 and we know that trivially
+false implies true evaluates to true.
+
+case2: n>0 then using (1) we find that x>0
+(4)n!=n!                     by reflexivity of equality (factorial is well defined
+                             due to assumption in case2)
+(5)x!=n!                     from substituting (1) in (4)
+(6)x!=1*x!                   definition of multiplication
+(7)x!=y*x!                   substitute (2) in (6)
+(8)n!=y*x!                   substitute (5) in (7)
+(9)n!=y*x! & OUT=append(_)   trivial from (3) and (8)
+Therefore in case2 the implication also holds true.
+Due to the fact the the implication holds true in both cases we can conclude that
+under any assignment for n the implication holds which means that
+(x=n & y=1 & OUT=append(_)) |= (x>0 implies (x!*y=n! & OUT=append(_)))
+
+
+
+Pre2:
+((x>0 implies (x!*y=n! & OUT=append(_))) & !(x=1)) |= (x-1>0 implies ((x-1)!*x*y=n! & OUT=append(_)))
+We only need to consider the cases x>0 or x<0
+case1: x<0 means x-1<0 so the second implication trivially holds true (because false implies true yields true)
+
+case2: x>0
+(1) !(x=1)                                          given
+(2) x>1                                             from (1) using the assumption in case2
+(3) x-1>0                                           subtracting 1 from both sides in (2)
+(4) x!*y=n!                                         given because we are in case2
+(5) OUT=append(_)                                   given because we are in case2
+(6) (x-1)!*x=x!                                     by the definition of factorial using the fact that x-1>0 from (3)
+(7) (x-1)!*x*y=n!                                   substituting (6) in (4)
+(8) (x-1)!*x*y=n! & OUT=append(_)                   from (7) and (5)
+(9) (x-1>0 implies ((x-1)!*x*y=n! & OUT=append(_))  from (3) and (8) using the definition of implication
+Therefore (x-1>0 implies ((x-1)!*x*y=n! & OUT=append(_))) is true in both cases which means
+((x>0 implies (x!*y=n! & OUT=append(_))) & !(x=1)) |= (x-1>0 implies ((x-1)!*x*y=n! & OUT=append(_)))
+
+
+
+Post2:
+(x>0 implies (x!*y=n! & OUT=append(_))) |= (x>0 implies (x!*y=n! & OUT=append(_)))
+This is trivially true due to the definition of logical entailment.
+
+
+
+Post1:
+((x>0 implies (x!*y=n! & OUT=append(_))) & !!(x=1)) |= (y=n! & OUT=append(_))
+(1)!!(x=1)             given
+(2)x=1                 by the definition of negation and (1)
+(3)1>0                 by definition of >
+(4)x>0                 substituting (2) into (3)
+(5)x!*y=n!             by the definition of implication and using (4) in the implication
+(6)OUT=append(_)       by the definition of implication and using (4) in the implication
+(7)1!*y=n!             substituting (2) into (5)
+(8)y=n!                by the definition of 1! and multiplication with 1
+Therefore from (8) and (6) we can conclude that
+((x>0 implies (x!*y=n! & OUT=append(_))) & !!(x=1)) |= (y=n! & OUT=append(_))
 {------------------------------------------------------------
  -- Part B)
  --
