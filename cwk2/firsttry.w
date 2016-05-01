@@ -30,40 +30,47 @@
 
 write('Factorial calculator'); writeln;
 
-{ head(IN)=n & OUT=append(_) }
-
 write('Enter number: ');
 
-{ head(IN)=n & OUT=append(_) }
+{ OUT=append(_) & head(IN)=n }
 
 read(x);
 
-{ x=n & OUT=append(_) }
+{ OUT=append(_) & x=n & IN=tail(IN) }
+
+{ OUT=append(_) & x=n }
 
 write('Factorial of '); write(x); write(' is ');
 
-{ x=n & OUT=append(_) }
+{ OUT=append(_) & x=n }
 
 y := 1;
 
-{ x=n & y=1 & OUT=append(_) }*
-{ x>0 & x!*y=n! & OUT=append(_) }
+{ OUT=append(_) & x=n & y=1 }
 
+{ OUT=append(_) & x!*y=n! }
 while !(x=1) do (
-  { x>0 & x!*y=n! & !(x=1) & OUT=append(_) }**
-  { x-1>0 & (x-1)!*x*y=n! & OUT=append(_) }
 
+  { OUT=append(_) & x!*y=n! & !(x=1)}
+
+  { OUT=append(_) & (x-1)!*x*y=n! & 1<=(x-1) }
   y := y * x;
 
-  { x-1>0 & (x-1)!*y=n! & OUT=append(_) }
+  { OUT=append(_) & (x-1)!*y=n! & 1<=(x-1) }
 
   x := x - 1
 
-  { x>0 & x!*y=n! & OUT=append(_) }
+  { OUT=append(_) & x!*y=n! & 1<=x }
+
 );
-{ x>0 & x!*y=n! & !!(x=1) & OUT=append(_) }***
-{ y=n! & OUT=append(_) }
+
+{ OUT=append(_) & x!*y=n! & x=1 }
+
+{ OUT=append(_) & y=n! }
+
 write(y);
+
+{ OUT=append(_,[y]) & y=n!}
 
 { OUT=append(_,[n!]) }
 
