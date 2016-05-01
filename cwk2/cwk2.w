@@ -87,19 +87,21 @@ x=n & y=1 & OUT=append(_) |= (x>0 implies (x!*y=n! & OUT=append(_)))
 Moving on we need to distinguish between two cases (n>0 and n<=0)
 
 case1: n<=0 then from (1) we get that x<=0 and we know that trivially
-false implies true evaluates to true.
+false implies true evaluates to true so the implication holds true.
 
-case2: n>0 then using (1) we find that x>0
+case2: n>0 then using (1) we find that x>0 so we need to prove the right hand side of the
+implication holds.
 (4)n!=n!                     by reflexivity of equality (factorial is well defined
-                             due to assumption in case2)
+                             due to assumption in case2 that n>0)
 (5)x!=n!                     from substituting (1) in (4)
 (6)x!=1*x!                   definition of multiplication
 (7)x!=y*x!                   substitute (2) in (6)
 (8)n!=y*x!                   substitute (5) in (7)
-(9)n!=y*x! & OUT=append(_)   trivial from (3) and (8)
+(9)n!=y*x! & OUT=append(_)   from (3) and (8)
 Therefore in case2 the implication also holds true.
-Due to the fact the the implication holds true in both cases we can conclude that
-under any assignment for n the implication holds which means that
+Due to the fact that the implication holds true in both cases we can conclude that
+if (x=n & y=1 & OUT=append(_)) holds true the implication holds true as well
+which means that
 (x=n & y=1 & OUT=append(_)) |= (x>0 implies (x!*y=n! & OUT=append(_)))
 
 
