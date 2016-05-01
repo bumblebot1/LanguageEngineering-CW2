@@ -85,10 +85,10 @@ b_val     FALSE s = False
 b_val (Eq a b)  s = (a_val a s) == (a_val b s)
 b_val (Le a b)  s = (a_val a s) <= (a_val b s)
 b_val (Neg a)   s =  not (b_val a s)
-b_val (And a b) s = (b_val a s)  && (b_val b s)
+b_val (And a b) s = (b_val a s) && (b_val b s)
 
 cond :: (a->T, a->a, a->a) -> (a->a)
-cond (b,p,q) s = if (b s) == True then (p s) else (q s)
+cond (b,p,q) s = if (b s) then (p s) else (q s)
 
 fix :: (a -> a) -> a
 fix f = f (fix f)
@@ -106,10 +106,10 @@ update s i v = x
 -- fv_stm p returns the set of (free) variables appearing in p:
 ---------------------------------------------------------------
 fv_stm :: Stm -> [Var]
-fv_stm (Ass x y)   = union (fv_aexp y) [x]
+fv_stm (Ass x y)   = union [x] (fv_aexp y)
 fv_stm  Skip       = []
 fv_stm (Comp x y)  = union (fv_stm x) (fv_stm y)
-fv_stm (If a x y)  = union (union (fv_stm x) (fv_bexp a)) (fv_stm y)
+fv_stm (If a x y)  = union (union (fv_bexp a) (fv_stm x)) (fv_stm y)
 fv_stm (While a x) = union (fv_bexp a) (fv_stm x)
 fv_stm (Read x)    = [x]
 fv_stm (WriteA x)  = fv_aexp x
@@ -235,7 +235,7 @@ ln8 = Comp (WriteA (V "base")) (Comp (WriteS " raised to the power of ") (Comp (
 -- program p in state s with input list i and output list o.
 ---------------------------------------------------------------
 cond' :: (c->T, (a,b,c)->(a,b,c), (a,b,c)->(a,b,c))-> (a,b,c)->(a,b,c)
-cond' (b,p,q) (i,o,s) = if (b s) == True then (p (i,o,s)) else (q (i,o,s))
+cond' (b,p,q) (i,o,s) = if (b s) then (p (i,o,s)) else (q (i,o,s))
 
 s_ds :: Stm -> IOState -> IOState
 s_ds (Ass v a)  (i,o,s)  = (i,o,(update s (a_val a s) v))
@@ -253,11 +253,6 @@ s_ds (WriteA x) (i,o,s)  = (i, o ++ [show (a_val x s)], s)
 s_ds (WriteB x) (i,o,s)  = (i, o ++ [show (b_val x s)], s)
 s_ds (WriteS x) (i,o,s)  = (i, o ++ [x], s)
 s_ds  WriteLn   (i,o,s)  = (i, o ++ ["\n"],s)
-
-stm::Stm
-stm=Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Comp (Ass "i" (N 10023))(WriteA (V "i")))(WriteLn))(Ass "a" (V "i")))(WriteA (V "a")))(WriteLn))(Ass "j" (N 76)))(WriteA (V "j")))(WriteLn))(Ass "a" (V "j")))(WriteA (V "a")))(WriteLn)
-
-(x,y,z) = s_ds stm ([27,39],[],undefined)
 
 ---------------------------------------------------------------
 -- Part F)
