@@ -100,7 +100,7 @@ implication holds.
 (9)n!=y*x! & OUT=append(_)   from (3) and (8)
 Therefore in case2 the implication also holds true.
 Due to the fact that the implication holds true in both cases we can conclude that
-if (x=n & y=1 & OUT=append(_)) holds true the implication holds true as well
+if (x=n & y=1 & OUT=append(_)) holds true then the implication holds true as well
 which means that
 (x=n & y=1 & OUT=append(_)) |= (x>0 implies (x!*y=n! & OUT=append(_)))
 
@@ -108,19 +108,19 @@ which means that
 
 Pre2:
 ((x>0 implies (x!*y=n! & OUT=append(_))) & !(x=1)) |= (x-1>0 implies ((x-1)!*x*y=n! & OUT=append(_)))
-We only need to consider the cases x>0 or x<0
-case1: x<0 means x-1<0 so the second implication trivially holds true (because false implies true yields true)
+(1) !(x=1)     given
+We only need to consider the cases x>0 or x<=0
+case1: x<=0 means x-1<0 so the second implication trivially holds true (because false implies true yields true)
 
 case2: x>0
-(1) !(x=1)                                          given
-(2) x>1                                             from (1) using the assumption in case2
-(3) x-1>0                                           subtracting 1 from both sides in (2)
-(4) x!*y=n!                                         given because we are in case2
-(5) OUT=append(_)                                   given because we are in case2
-(6) (x-1)!*x=x!                                     by the definition of factorial using the fact that x-1>0 from (3)
-(7) (x-1)!*x*y=n!                                   substituting (6) in (4)
-(8) (x-1)!*x*y=n! & OUT=append(_)                   from (7) and (5)
-(9) (x-1>0 implies ((x-1)!*x*y=n! & OUT=append(_))  from (3) and (8) using the definition of implication
+(2) x!*y=n!                                         given because (x>0 implies (x!*y=n! & OUT=append(_))) is true and we know x>0
+(3) OUT=append(_)                                   same reason as 2
+(4) x>1                                             from (1) using the assumption in case2
+(5) x-1>0                                           subtracting 1 from both sides in (4)
+(6) (x-1)!*x=x!                                     by the definition of factorial using the fact that x-1>0 from (5)
+(7) (x-1)!*x*y=n!                                   substituting (6) in (2)
+(8) (x-1)!*x*y=n! & OUT=append(_)                   from (7) and (3)
+(9) (x-1>0 implies ((x-1)!*x*y=n! & OUT=append(_))  from (5) and (8) using the definition of implication
 Therefore (x-1>0 implies ((x-1)!*x*y=n! & OUT=append(_))) is true in both cases which means
 ((x>0 implies (x!*y=n! & OUT=append(_))) & !(x=1)) |= (x-1>0 implies ((x-1)!*x*y=n! & OUT=append(_)))
 
@@ -134,15 +134,19 @@ This is trivially true due to the definition of logical entailment.
 
 Post1:
 ((x>0 implies (x!*y=n! & OUT=append(_))) & !!(x=1)) |= (y=n! & OUT=append(_))
+Let P=((x>0 implies (x!*y=n! & OUT=append(_))) & !!(x=1))
+and Q=(y=n! & OUT=append(_))
 (1)!!(x=1)             given
 (2)x=1                 by the definition of negation and (1)
 (3)1>0                 by definition of >
 (4)x>0                 substituting (2) into (3)
-(5)x!*y=n!             by the definition of implication and using (4) in the implication
-(6)OUT=append(_)       by the definition of implication and using (4) in the implication
-(7)1!*y=n!             substituting (2) into (5)
-(8)y=n!                by the definition of 1! and multiplication with 1
-Therefore from (8) and (6) we can conclude that
+(5)Because x>0 is true we must have that the second part of the implication is also true
+in order for P to be true.
+(6)x!*y=n!             from (5)
+(7)OUT=append(_)       from (5)
+(8)1!*y=n!             substituting (2) into (6)
+(9)y=n!                by the definition of 1! and multiplication with 1
+Therefore from (9) and (7) we can conclude that
 ((x>0 implies (x!*y=n! & OUT=append(_))) & !!(x=1)) |= (y=n! & OUT=append(_))
 {------------------------------------------------------------
  -- Part B)
@@ -151,39 +155,78 @@ Therefore from (8) and (6) we can conclude that
  -- of the following program (for computing exponents)
  -- with respect to suitable pre- and post-conditions:
  ------------------------------------------------------------}
-
+{ head(IN)=a & head(tail(IN))=b & a>=0 & b>=0 }
 write('Exponential calculator'); writeln;
+
+{ head(IN)=a & head(tail(IN))=b & a>=0 & b>=0 & OUT=append(_) }
 
 write('Enter base: ');
 
+{ head(IN)=a & head(tail(IN))=b & a>=0 & b>=0 & OUT=append(_) }
+
 read(base);
 
+{ base=a & a>=0 & b>=0 & head(IN)=b & OUT=append(_) }
+
 if 1 <= base then (
+  { (1<=base) & base=a & a>=0 & b>=0 & head(IN)=b }
 
   write('Enter exponent: ');
 
+  { (1<=base) & base=a & a>=0 & b>=0 & head(IN)=b & OUT=append(_) }
+
   read(exponent);
+
+  { (1<=base) & base=a & a>=0 & b>=0 & exponent=b & OUT=append(_) }
 
   num := 1;
 
+  { (1<=base) & base=a & a>=0 & b>=0 & exponent=b & num=1 & OUT=append(_) }
+
   count := exponent;
+
+  { (1<=base) & base=a & a>=0 & b>=0 & exponent=b & num=1 & count=exponent & OUT=append(_) }***Pre1
+  { num=base^(b-count) & count>=0 & base=a & a>=0 & b>=0}
 
   while 1 <= count do (
 
+    { num=base^(b-count) & count>=0 & base=a & a>=0 & b>=0 & count>=1}***Pre2
+    { num*base=base^(b-(count-1)) & a>=0 & b>=0 & base=a & count-1>=0}
+
     num := num * base;
+
+    { num=base^(b-(count-1)) & a>=0 & b>=0 & base=a & count-1>=0}
 
     count := count - 1
 
+    { num=base^(b-count) & a>=0 & b>=0 & base=a & count>=0}***Post2
+    { num=base^(b-count) & a>=0 & b>=0 & base=a & count>=0}
   );
+
+  { num=base^(b-count) & a>=0 & b>=0 & base=a & count>=0 & !(count>=1) }***Post1
+  { num=a^b }
 
   write(base); write(' raised to the power of '); write(exponent); write(' is ');
 
+  { num=a^b & OUT=append(_) }
+
   write(num)
+
+  { OUT=append(_,[a^b])}
 
 ) else (
 
+  { !(1<=base) & base=a & a>=0 & b>=0 & head(IN)=b}***Pre3
+  { !(1<=base) & base=a & a>=0 & b>=0}
+
   write('Invalid base '); write(base)
 
+  { OUT=append(_,[base]) & !(1<=base) & base=a & a>=0 & b>=0}***Post3
+  { OUT=append(_,[a^b])}
 );
 
+{ OUT=append(_,[a^b]) }
+
 writeln
+
+{ OUT=append(_,[a^b,_]) }
