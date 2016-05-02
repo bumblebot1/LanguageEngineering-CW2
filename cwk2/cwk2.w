@@ -155,55 +155,55 @@ Therefore from (9) and (7) we can conclude that
  -- of the following program (for computing exponents)
  -- with respect to suitable pre- and post-conditions:
  ------------------------------------------------------------}
-{ head(IN)=a & head(tail(IN))=b & a>=0 & b>=0 }
+{ head(IN)=a & head(tail(IN))=b & a>=1 & b>=1 }
 write('Exponential calculator'); writeln;
 
-{ head(IN)=a & head(tail(IN))=b & a>=0 & b>=0 & OUT=append(_) }
+{ head(IN)=a & head(tail(IN))=b & a>=1 & b>=1 & OUT=append(_) }
 
 write('Enter base: ');
 
-{ head(IN)=a & head(tail(IN))=b & a>=0 & b>=0 & OUT=append(_) }
+{ head(IN)=a & head(tail(IN))=b & a>=1 & b>=1 & OUT=append(_) }
 
 read(base);
 
-{ base=a & a>=0 & b>=0 & head(IN)=b & OUT=append(_) }
+{ base=a & a>=1 & b>=1 & head(IN)=b & OUT=append(_) }
 
 if 1 <= base then (
-  { (1<=base) & base=a & a>=0 & b>=0 & head(IN)=b }
+  { (1<=base) & base=a & a>=1 & b>=1 & head(IN)=b }
 
   write('Enter exponent: ');
 
-  { (1<=base) & base=a & a>=0 & b>=0 & head(IN)=b & OUT=append(_) }
+  { (1<=base) & base=a & a>=1 & b>=1 & head(IN)=b & OUT=append(_) }
 
   read(exponent);
 
-  { (1<=base) & base=a & a>=0 & b>=0 & exponent=b & OUT=append(_) }
+  { (1<=base) & base=a & a>=1 & b>=1 & exponent=b & OUT=append(_) }
 
   num := 1;
 
-  { (1<=base) & base=a & a>=0 & b>=0 & exponent=b & num=1 & OUT=append(_) }
+  { (1<=base) & base=a & a>=1 & b>=1 & exponent=b & num=1 & OUT=append(_) }
 
   count := exponent;
 
-  { (1<=base) & base=a & a>=0 & b>=0 & exponent=b & num=1 & count=exponent & OUT=append(_) }***Pre1
-  { num=base^(b-count) & count>=0 & base=a & a>=0 & b>=0}
+  { (1<=base) & base=a & a>=1 & b>=1 & exponent=b & num=1 & count=exponent & OUT=append(_) }***Pre1
+  { num=base^(b-count) & count>=0 & base=a & a>=1 & b>=1 }
 
   while 1 <= count do (
 
-    { num=base^(b-count) & count>=0 & base=a & a>=0 & b>=0 & count>=1}***Pre2
-    { num*base=base^(b-(count-1)) & a>=0 & b>=0 & base=a & count-1>=0}
+    { num=base^(b-count) & count>=0 & base=a & a>=1 & b>=1 & count>=1}***Pre2
+    { num*base=base^(b-(count-1)) & a>=1 & b>=1 & base=a & count-1>=0}
 
     num := num * base;
 
-    { num=base^(b-(count-1)) & a>=0 & b>=0 & base=a & count-1>=0}
+    { num=base^(b-(count-1)) & a>=1 & b>=1 & base=a & count-1>=0}
 
     count := count - 1
 
-    { num=base^(b-count) & a>=0 & b>=0 & base=a & count>=0}***Post2
-    { num=base^(b-count) & a>=0 & b>=0 & base=a & count>=0}
+    { num=base^(b-count) & a>=1 & b>=1 & base=a & count>=0}***Post2
+    { num=base^(b-count) & a>=1 & b>=1 & base=a & count>=0}
   );
 
-  { num=base^(b-count) & a>=0 & b>=0 & base=a & count>=0 & !(count>=1) }***Post1
+  { num=base^(b-count) & a>=1 & b>=1 & base=a & count>=0 & !(count>=1) }***Post1
   { num=a^b }
 
   write(base); write(' raised to the power of '); write(exponent); write(' is ');
@@ -216,12 +216,12 @@ if 1 <= base then (
 
 ) else (
 
-  { !(1<=base) & base=a & a>=0 & b>=0 & head(IN)=b}***Pre3
-  { !(1<=base) & base=a & a>=0 & b>=0}
+  { !(1<=base) & base=a & a>=1 & b>=1 & head(IN)=b }***Pre3
+  { !(1<=base) & base=a & a>=1 & b>=1 }
 
   write('Invalid base '); write(base)
 
-  { OUT=append(_,[base]) & !(1<=base) & base=a & a>=0 & b>=0}***Post3
+  { OUT=append(_,[base]) & !(1<=base) & base=a & a>=1 & b>=1}***Post3
   { OUT=append(_,[a^b])}
 );
 
