@@ -217,11 +217,11 @@ if 1 <= base then (
 ) else (
 
   { !(1<=base) & base=a & a>=1 & b>=1 & head(IN)=b }***Pre3
-  { !(1<=base) & base=a & a>=1 & b>=1 }
+  { base=a^b }
 
   write('Invalid base '); write(base)
 
-  { OUT=append(_,[base]) & !(1<=base) & base=a & a>=1 & b>=1}***Post3
+  { OUT=append(_,[a^b])}***Post3
   { OUT=append(_,[a^b])}
 );
 
@@ -230,3 +230,88 @@ if 1 <= base then (
 writeln
 
 { OUT=append(_,[a^b,_]) }
+
+
+
+PROOF OBLIGATIONS:
+Pre1:
+((1<=base) & base=a & a>=1 & b>=1 & exponent=b & num=1 & count=exponent & OUT=append(_)) |= (num=base^(b-count) & count>=0 & base=a & a>=1 & b>=1)
+(1)  1<=base                              given
+(2)  base=a                               given
+(3)  a>=1                                 given
+(4)  b>=1                                 given
+(5)  exponent=b                           given
+(6)  num=1                                given
+(7)  count=exponent                       given
+(8)  count=b                              substitute (7) in (5)
+(9)  count>=1                             substitute (8) in (4)
+(10) b-count=0                            from (8) by definition of -
+(11) base^0 = 1                           by definition of ^(power in this case)
+(12) base^(b-count)=1                     substituting (10) in (11)
+(13) num = base^(b-count)                 substituting (6) in (12)
+(14) 1>=0                                 by definition of >=
+(15) count>=0                             using transitivity of >=; (9) and (11)
+Therefore we can conclude that ((1<=base) & base=a & a>=1 & b>=1 & exponent=b & num=1 & count=exponent & OUT=append(_)) |= (num=base^(b-count) & count>=0 & base=a & a>=1 & b>=1)
+
+
+
+Pre2:
+(num=base^(b-count) & count>=0 & base=a & a>=1 & b>=1 & count>=1) |= (num*base=base^(b-(count-1)) & a>=1 & b>=1 & base=a & count-1>=0)
+(1)   num=base^(b-count)                      given
+(2)   count>=0                                given
+(3)   base=a                                  given
+(4)   a>=1                                    given
+(5)   b>=1                                    given
+(6)   count>=1                                given
+(7)   count-1>=0                              by subtracting 1 from both sides in (6)
+(8)   num*base=base*base^(b-count)            multiplying both sides by base in (1)
+(9)   base*base^(b-count)=base^(b+1-count)    by definition of multiplication and power
+(10)  base^(b+1-count)=base^(b-(count-1))     by associativity of + and -
+(11)  base*base^(b-count)=base^(b-(count-1))  substituting (10) into (9)
+(12)  num*base=base^(b-(count-1))             substituting (11) into (8)
+Therefore we can conclude that (num=base^(b-count) & count>=0 & base=a & a>=1 & b>=1 & count>=1) |= (num*base=base^(b-(count-1)) & a>=1 & b>=1 & base=a & count-1>=0)
+
+
+
+Post2:
+(num=base^(b-count) & a>=1 & b>=1 & base=a & count>=0) |= (num=base^(b-count) & a>=1 & b>=1 & base=a & count>=0)
+This is trivially true since the two statements are identical.
+
+
+
+Post1:
+(num=base^(b-count) & a>=1 & b>=1 & base=a & count>=0 & !(count>=1)) |= (num=a^b)
+(1)   count>=0                given
+(2)   !(count>=1)             given
+(3)   count<1                 from (2)
+(4)   count=0                 from (1) and (3)
+(5)   base=a                  given
+(6)   b-0=b                   by definition of subtraction with 0
+(7)   b-count=b               substitute (4) into (6)
+(8)   num=base^(b-count)      given
+(9)   base^(b-count)=base^b   by raising base to the same power (7)
+(10)  num=base^b              substitute (9) into (8)
+(11)  base^b=a^b              raising both sides of (5) to the power of b
+(12)  num=a^b                 by substituting (11) into (10)
+Therefore we can conclude that (num=base^(b-count) & a>=1 & b>=1 & base=a & count>=0 & !(count>=1)) |= (num=a^b)
+
+
+
+Pre3:
+(!(1<=base) & base=a & a>=1 & b>=1 & head(IN)=b) |= (base=a^b)
+(1) !(1<=base)   given
+(2) base<1       from (1) by applying the negation to <=
+(3) base=a       given
+(4) a>=1         given
+(5) base>=1      by transitivity from (3) and (4)
+However we can now observe that (2) and (5) are mutually exclusive so when (2) is true
+we must have (5) is false therefore the right side of the entailment is always false.
+This means there exists no satisfying assignment for the left hand side for which the right hand side is false
+(because no satisfying assignment for the left hand side exists). Therefore we can conclude that the entailment holds so:
+(!(1<=base) & base=a & a>=1 & b>=1 & head(IN)=b) |= (base=a^b)
+
+
+
+Post3:
+OUT=append(_,[a^b]) |= OUT=append(_,[a^b])
+Trivially true since both sides of the entailment are identical.
