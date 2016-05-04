@@ -81,48 +81,32 @@ writeln;
 PROOF OBLIGATIONS:
 Pre1:
 x=n & y=1 & OUT=append(_) |= (x>0 implies (x!*y=n! & OUT=append(_)))
-(1)x=n           given
-(2)y=1           given
-(3)OUT=append(_) given
-Moving on we need to distinguish between two cases (n>0 and n<=0)
-
-case1: n<=0 then from (1) we get that x<=0 and we know that trivially
-false implies true evaluates to true so the implication holds true.
-
-case2: n>0 then using (1) we find that x>0 so we need to prove the right hand side of the
-implication holds.
-(4)n!=n!                     by reflexivity of equality (factorial is well defined
-                             due to assumption in case2 that n>0)
-(5)x!=n!                     from substituting (1) in (4)
-(6)x!=1*x!                   definition of multiplication
-(7)x!=y*x!                   substitute (2) in (6)
-(8)n!=y*x!                   substitute (5) in (7)
-(9)n!=y*x! & OUT=append(_)   from (3) and (8)
-Therefore in case2 the implication also holds true.
-Due to the fact that the implication holds true in both cases we can conclude that
-if (x=n & y=1 & OUT=append(_)) holds true then the implication holds true as well
-which means that
-(x=n & y=1 & OUT=append(_)) |= (x>0 implies (x!*y=n! & OUT=append(_)))
+(1)x=n                                      given
+(2)y=1                                      given
+(3)OUT=append(_)                            given
+(4)x!=n!                                    taking factorial of both sides in (1)
+(5)x!=1*x!                                  definition of multiplication
+(6)x!=y*x!                                  substitute (2) in (5)
+(7)x>0                                      assumption
+(8)n!=y*x!                                  substitute (4) in (6)
+(9)n!=y*x! & OUT=append(_)                  from (3) and (8)
+(10) x>0 implies (x!*y=n! & OUT=append(_))  introduction of implication (7),(9)
 
 
 
 Pre2:
 ((x>0 implies (x!*y=n! & OUT=append(_))) & !(x=1)) |= (x-1>0 implies ((x-1)!*x*y=n! & OUT=append(_)))
-(1) !(x=1)     given
-We only need to consider the cases x>0 or x<=0
-case1: x<=0 means x-1<0 so the second implication trivially holds true (because false implies true yields true)
-
-case2: x>0
-(2) x!*y=n!                                         given because (x>0 implies (x!*y=n! & OUT=append(_))) is true and we know x>0
-(3) OUT=append(_)                                   same reason as 2
-(4) x>1                                             from (1) using the assumption in case2
-(5) x-1>0                                           subtracting 1 from both sides in (4)
-(6) (x-1)!*x=x!                                     by the definition of factorial using the fact that x-1>0 from (5)
-(7) (x-1)!*x*y=n!                                   substituting (6) in (2)
-(8) (x-1)!*x*y=n! & OUT=append(_)                   from (7) and (3)
-(9) (x-1>0 implies ((x-1)!*x*y=n! & OUT=append(_))  from (5) and (8) using the definition of implication
-Therefore (x-1>0 implies ((x-1)!*x*y=n! & OUT=append(_))) is true in both cases which means
-((x>0 implies (x!*y=n! & OUT=append(_))) & !(x=1)) |= (x-1>0 implies ((x-1)!*x*y=n! & OUT=append(_)))
+(1) x>0 implies (x!*y=n! & OUT=append(_))            given
+(2) x-1>0                                            assumption
+(3) x>1                                              adding 1 to both sides
+(4) 1>0                                              basic arithmetic
+(5) x>0                                              from (3) and (4) using transitivity of >
+(6) x!*y=n!                                          from (5) and (1) by elimination of implicaiton and &
+(7) x!=x*(x-1)!                                      by definition of ! using (5)
+(8) n!=y*x*(x-1)!                                    substituting (7) into (6)
+(9) OUT=append(_)                                    from (5) and (1) by elimination of implication and &
+(10)(x-1)!*x*y=n! & OUT=append(_);                   from (8) and (9)
+(11)(x-1>0 implies ((x-1)!*x*y=n! & OUT=append(_)))  introduction of implication (2) (10)
 
 
 
@@ -134,20 +118,18 @@ This is trivially true due to the definition of logical entailment.
 
 Post1:
 ((x>0 implies (x!*y=n! & OUT=append(_))) & !!(x=1)) |= (y=n! & OUT=append(_))
-Let P=((x>0 implies (x!*y=n! & OUT=append(_))) & !!(x=1))
-and Q=(y=n! & OUT=append(_))
-(1)!!(x=1)             given
-(2)x=1                 by the definition of negation and (1)
-(3)1>0                 by definition of >
-(4)x>0                 substituting (2) into (3)
-(5)Because x>0 is true we must have that the second part of the implication is also true
-in order for P to be true.
-(6)x!*y=n!             from (5)
-(7)OUT=append(_)       from (5)
-(8)1!*y=n!             substituting (2) into (6)
-(9)y=n!                by the definition of 1! and multiplication with 1
-Therefore from (9) and (7) we can conclude that
-((x>0 implies (x!*y=n! & OUT=append(_))) & !!(x=1)) |= (y=n! & OUT=append(_))
+(1)(x>0 implies (x!*y=n! & OUT=append(_))) & !!(x=1))   given
+(2)x>0 implies (x!*y=n! & OUT=append(_))                by elimination of & in (1)
+(3)!!(x=1)                                              by elimination of & in (1)
+(4)x=1                                                  by elimination of !! in (3)
+(5)x>0                                                  from (4) using 1>0 (basic arithmetic)
+(6)y*x!=n! & OUT=append(_)                              from (5) and (2) by elimination of implication
+(7)y*x!=n!                                              elimination of & in (6)
+(8)x!=1!=1*0!=1*1=1                                     from (4) using definition of !
+(9)y*1=n!                                               substitution of (8) into (7)
+(10)y=n!                                                from (9)
+(11)OUT=append(_)                                       elimination of & in (6)
+(12)y=n! & OUT=append(_)                                from (10) and (11) 
 {------------------------------------------------------------
  -- Part B)
  --
@@ -245,8 +227,8 @@ Pre1:
 (7)  count=exponent                       given
 (8)  count=b                              substitute (7) in (5)
 (9)  count>=1                             substitute (8) in (4)
-(10) b-count=0                            from (8) by definition of -
-(11) base^0 = 1                           by definition of ^(power in this case)
+(10) b-count=0                            from (8) by subtracting count from both sides
+(11) base^0 = 1                           by definition of ^
 (12) base^(b-count)=1                     substituting (10) in (11)
 (13) num = base^(b-count)                 substituting (6) in (12)
 (14) 1>=0                                 by definition of >=
