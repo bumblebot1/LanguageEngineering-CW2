@@ -46,11 +46,11 @@ write('Factorial of '); write(x); write(' is ');
 
 y := 1;
 
-{ x=n & y=1 & OUT=append(_) }* Pre1
+{ x=n & y=1 & OUT=append(_) }*** Pre1
 { x>0 implies (x!*y=n! & OUT=append(_)) }
 
 while !(x=1) do (
-  { (x>0 implies (x!*y=n! & OUT=append(_))) & !(x=1) }** Pre2
+  { (x>0 implies (x!*y=n! & OUT=append(_))) & !(x=1) }*** Pre2
   { x-1>0 implies ((x-1)!*x*y=n! & OUT=append(_)) }
 
   y := y * x;
@@ -62,7 +62,7 @@ while !(x=1) do (
   { x>0 implies (x!*y=n! & OUT=append(_)) }***Post2
   { x>0 implies (x!*y=n! & OUT=append(_)) }
 );
-{ (x>0 implies (x!*y=n! & OUT=append(_))) & !!(x=1) }****Post1
+{ (x>0 implies (x!*y=n! & OUT=append(_))) & !!(x=1) }***Post1
 { y=n! & OUT=append(_) }
 write(y);
 
@@ -129,7 +129,7 @@ Post1:
 (9)y*1=n!                                               substitution of (8) into (7)
 (10)y=n!                                                from (9)
 (11)OUT=append(_)                                       elimination of & in (6)
-(12)y=n! & OUT=append(_)                                from (10) and (11) 
+(12)y=n! & OUT=append(_)                                from (10) and (11)
 {------------------------------------------------------------
  -- Part B)
  --
