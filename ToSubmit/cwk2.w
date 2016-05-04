@@ -159,7 +159,7 @@ if 1 <= base then (
 
   read(exponent);
 
-  { (1<=base) & base=a & a>=1 & b>=1 & exponent=b & OUT=append(_) }
+  { (1<=base) & base=a & a>=1 & b>=1 & 1=1 & exponent=b & OUT=append(_) }
 
   num := 1;
 
@@ -167,7 +167,7 @@ if 1 <= base then (
 
   count := exponent;
 
-  { (1<=base) & base=a & a>=1 & b>=1 & exponent=b & num=1 & count=exponent & OUT=append(_) }***Pre1
+  { (1<=base) & base=a & a>=1 & b>=1 & exponent=b & num=1 & count=b & OUT=append(_) }***Pre1
   { num=base^(b-count) & count>=0 & base=a & a>=1 & b>=1 }
 
   while 1 <= count do (
@@ -217,23 +217,22 @@ writeln
 
 PROOF OBLIGATIONS:
 Pre1:
-((1<=base) & base=a & a>=1 & b>=1 & exponent=b & num=1 & count=exponent & OUT=append(_)) |= (num=base^(b-count) & count>=0 & base=a & a>=1 & b>=1)
+((1<=base) & base=a & a>=1 & b>=1 & exponent=b & num=1 & count=b & OUT=append(_)) |= (num=base^(b-count) & count>=0 & base=a & a>=1 & b>=1)
 (1)  1<=base                              given
 (2)  base=a                               given
 (3)  a>=1                                 given
 (4)  b>=1                                 given
 (5)  exponent=b                           given
 (6)  num=1                                given
-(7)  count=exponent                       given
-(8)  count=b                              substitute (7) in (5)
-(9)  count>=1                             substitute (8) in (4)
-(10) b-count=0                            from (8) by subtracting count from both sides
-(11) base^0 = 1                           by definition of ^
-(12) base^(b-count)=1                     substituting (10) in (11)
-(13) num = base^(b-count)                 substituting (6) in (12)
-(14) 1>=0                                 by definition of >=
-(15) count>=0                             using transitivity of >=; (9) and (11)
-Therefore we can conclude that ((1<=base) & base=a & a>=1 & b>=1 & exponent=b & num=1 & count=exponent & OUT=append(_)) |= (num=base^(b-count) & count>=0 & base=a & a>=1 & b>=1)
+(7)  count=b                              given
+(8)  count>=1                             substitute (7) in (4)
+(9)  b-count=0                            from (7) by subtracting count from both sides
+(10) base^0 = 1                           by definition of ^
+(11) base^(b-count)=1                     substituting (9) in (10)
+(12) num = base^(b-count)                 substituting (6) in (11)
+(13) 1>=0                                 by definition of >=
+(14) count>=0                             using transitivity of >=; (8) and (13)
+Therefore we can conclude that ((1<=base) & base=a & a>=1 & b>=1 & exponent=b & num=1 & count=b & OUT=append(_)) |= (num=base^(b-count) & count>=0 & base=a & a>=1 & b>=1)
 
 
 
