@@ -8,7 +8,6 @@ all:
 
 clean:
 	rm -f *.class
-	rm -f *.txt
 	rm -f *.tokens
 	rm -f *.ass
 	rm -f Lex.java

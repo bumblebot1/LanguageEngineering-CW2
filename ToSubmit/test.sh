@@ -1,0 +1,17 @@
+./cwk2.sh test0.w
+printf '\n'
+./cwk2.sh test1.w
+printf '\n'
+./cwk2.sh test2.w
+printf "\n"
+./cwk2.sh test3.w
+printf '\n'
+./cwk2.sh test4.w
+printf '\n'
+./cwk2.sh test5.w
+printf '\n'
+./cwk2.sh test6.w
+printf '\n'
+./cwk2.sh test7.w
+printf '\n'
+./cwk2.sh testsk.w
